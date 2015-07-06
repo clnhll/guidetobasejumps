@@ -88,13 +88,12 @@ $http.post('/api/things', newThing);
 But wait! You’ll soon realize that while all the other things in your *$scope.awesomeThings* array have unique ids assigned by MongoDB (under the *thing.\_id* property), your *newThing* object will not, which will make it hard for you at some point to make database actions on it (deleting it from your database requires you to use its *._id* property). So what you’ll want to do after you add it to your *$scope.awesomeThings* array (because we want it to show up on the user’s page immediately), is to call  
 
 ~~~javascript
-$http.post('/api/things', newThing).success(function() {
-	$http.get('/api/things').success(function(awesomeThings) {
-		$scope.awesomeThings = awesomeThings;
-	}
+$http.post('/api/things', newThing).success(function(thatThingWeJustAdded) {
+	$scope.awesomeThings.pop(); 			 // let's lose that id-lacking newThing 
+	$scope.awesomeThings.push(thatThingWeJustAdded); // and add the id-having newThing!
 };
 ~~~
-to post it to your database and replace the local array with a new array that has the database’s version of your *newThing* object, unique *._id* and all. Notice the *$http.get* call is only called once the *$http.post* call has succeeded! This is because *$http* calls are asynchronous, so we want to ensure that your program waits to call *$http.get* and refresh your local array until it’s sure your *newThing* has been posted to the database.
+to post it to your database and update your local array with the database’s version of your *newThing* object, unique *._id* and all. Notice the callback we pass to the success function receives the new *thing* back from the database as an argument! This way you can easily add it back to your local scope without too much overhead.
 
 ##Part 4: Dynamic URLs using $routeParams, more useful APIs
 What if you have a lot of users posting *things* to your website? Maybe your users want to have a profile, or a wall, of the *things* they’ve posted, and they want to be able to share it with their friends with a url? You can do that, no biggie!
