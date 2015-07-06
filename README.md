@@ -89,8 +89,8 @@ But wait! You’ll soon realize that while all the other things in your *$scope.
 
 ~~~javascript
 $http.post('/api/things', newThing).success(function(thatThingWeJustAdded) {
-	$scope.awesomeThings.pop(); 			 // let's lose that id-lacking newThing 
-	$scope.awesomeThings.push(thatThingWeJustAdded); // and add the id-having newThing!
+	$scope.awesomeThings.pop();	// let's lose that id-lacking newThing 
+	$scope.awesomeThings.push(thatThingWeJustAdded);	// and add the id-having newThing!
 };
 ~~~
 to post it to your database and update your local array with the database’s version of your *newThing* object, unique *._id* and all. Notice the callback we pass to the success function receives the new *thing* back from the database as an argument! This way you can easily add it back to your local scope without too much overhead.
