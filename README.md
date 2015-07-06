@@ -8,7 +8,7 @@ Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Wayp
 
 ###Throughout this guide:  
 __bolded/names/with.extensions_</a> are directories and files in the project file structure  
-<a>highlighted.items/are/hypothetical</a> URLs that allow access to different pages in your app  
+<a href="">highlighted.items/are/hypothetical</a> URLs that allow access to different pages in your app  
 *italicizedItems* are function and object names within your code
 
 ##Part 1: Frontend
@@ -16,10 +16,10 @@ First things first: All your user-facing files and angular files are in **/clien
 
 1. **app.js**: defines your app and includes some basic app-wide functions, you probably don’t really need to mess with it unless you’re trying to add more dependencies to your app. We’re not gonna worry about that right now.  
 2. **app.css**: an app-wide stylesheet, you can put styles here if you want but I’d recommend you put them in **main/main.css**, as these styles are also app-wide.  
-3. **main/**: this folder contains what the user sees first when they load up your site. **main.html** is the page template, **main.js** routes the user to **main.html** when the user goes to the top level directory of your website—that is, <a>http://yourapp.wherever.itis/</a> with no <a>/other/url/hierarchy</a>. You’ll also learn soon that you can define your app’s <a>/url/heirarchy/fairly/arbitrarily</a>. You won’t really need to edit **main.js** or **main.controller.spec.js**, so let's not worry about those right now. If you look through the **main.html** file you’ll see it uses *ng-repeat* to show *things* in *awesomeThings*. Where does it get *awesomeThings*?  
+3. **main/**: this folder contains what the user sees first when they load up your site. **main.html** is the page template, **main.js** routes the user to **main.html** when the user goes to the top level directory of your website—that is, <a href="">http://yourapp.wherever.itis/</a> with no <a href="">/other/url/hierarchy</a>. You’ll also learn soon that you can define your app’s <a href="">/url/heirarchy/fairly/arbitrarily</a>. You won’t really need to edit **main.js** or **main.controller.spec.js**, so let's not worry about those right now. If you look through the **main.html** file you’ll see it uses *ng-repeat* to show *things* in *awesomeThings*. Where does it get *awesomeThings*?  
 4. **main/main.controller.js**: all of the javascript functions you want to use to interact directly with the user go here! You’ll put functions here to add and remove items from your database, refresh views for your user, etc. Here, *awesomeThings* are pulled from your database and added to the local scope so your HTML view can display them! How cool! We’ll get to adding custom objects to your database in a minute.
 
-Great! Now you know how to interact with the user! But what if you want your app to have another page that does something else? Maybe **main.html** shows the home page, but you want a page that shows a form to add a poll? maybe <a>http://yourapp.wherever.itis/newpage</a>? This is where the yeoman generator comes in handy.
+Great! Now you know how to interact with the user! But what if you want your app to have another page that does something else? Maybe **main.html** shows the home page, but you want a page that shows a form to add a poll? maybe <a href="">http://yourapp.wherever.itis/newpage</a>? This is where the yeoman generator comes in handy.
 ###Creating a new route
 
 	>> yo angular-fullstack:route newpage 
@@ -93,7 +93,7 @@ Let’s say you used
 
 	>> yo angular-fullstack:route wall
 
-to generate a <a>http://myapp.wherever.com/wall/</a> route for your users. You want a link to <a>http://myapp.wherever.com/wall/someUsername</a> to show a specific user’s *things*.  
+to generate a <a href="">http://myapp.wherever.com/wall/</a> route for your users. You want a link to <a href="">http://myapp.wherever.com/wall/someUsername</a> to show a specific user’s *things*.  
 Browse to **/client/app/wall/wall.js** and notice that it detects what URL the user is requesting before acting on it:  
 
 ~~~javascript
