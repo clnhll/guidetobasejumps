@@ -1,6 +1,6 @@
 #Intro to Yeoman Angular-Fullstack Basejumps
 
->Hey FreeCodeCampers! This guide is here to help you navigate creating your first basejump. When I encountered it, I had no idea what was going on and spent weeks learning all of these things myself. Everything here is stuff I wish I had known coming into the basejumps. —<a href="http://twitter.com/clnhll">@clnhll</a>
+>Hey FreeCodeCampers! This guide is here to help you navigate creating your first basejump. When I encountered the first basejump, I had no idea what was going on and spent weeks learning all of these things myself. Everything here is stuff I wish I had known coming into the basejumps. —<a href="http://twitter.com/clnhll">@clnhll</a>
 
 Yeoman is a tool that allows you to generate barebones apps based on different software stacks using “generator” packages made by developers who want to make your life easier. These packages streamline your time developing and deploying websites using your platform of choice. We’re using a full-stack MEAN (MongoDB, ExpressJS, AngularJS, NodeJS) generator called generator-angular-fullstack by DaftMonk (https://github.com/DaftMonk/generator-angular-fullstack).  
 
