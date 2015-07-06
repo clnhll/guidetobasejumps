@@ -23,16 +23,26 @@ Great! Now you know how to interact with the user! But what if you want your app
 ###Creating a new route
 
 	>> yo angular-fullstack:route newpage 
-   Typing the above into your command-line will generate a **newpage/** route for your app! It automatically generates all the necessary files within your **/client/app/newpage** folder, like your **/client/app/main** folder, with a **newpage.controller.js**, **newpage.controller.spec.js**, **newpage.js**, and **newpage.html**. These all pretty much behave like the ones in the **main/** route. If you’re accessing the database in your newpage controller, you’ll want to add *$http* to the list of dependencies in **newpage.controller.js** the same way it’s included in **main.controller.js**. Check out **main.controller.js** and see if you can figure it out.  
+   Typing the above into your command-line will generate a **newpage/** route for your app! It automatically generates all the necessary files within your **/client/app/newpage** folder, like your **/client/app/main** folder, with a **newpage.controller.js**, **newpage.controller.spec.js**, **newpage.js**, and **newpage.html**. These all pretty much behave like the ones in the **main/** route. If you’re accessing the database in your newpage controller, you’ll want to add *$http* to the list of dependencies in **newpage.controller.js** the same way it’s included in **main.controller.js**: 
+
+~~~javascript
+angular.module('myApp')
+  .controller('MainCtrl', function ($scope, $http) { ...
+~~~
+  
 
 ###Creating a new directive
 Do you remember custom directives from the shaping up with angular course? you can also make a custom directive!
 
 	>> yo angular-fullstack:directive newdirective
 
-And if you need an html template for your custom directive (maybe you’re just making a directive to clean up your HTML code), tell it to make an html file when it prompts you to.
+And if you need an html template for your custom directive (maybe you’re just making a directive to clean up your HTML code), tell it to make an html file when it prompts you to and you'll be able to include the contents of that template anywhere in your app with:
 
-Okay! But what about the database? What’s going on there?
+~~~html
+<newdirective></newdirective>
+~~~
+
+Cool! But what about the database? What’s going on there?
 
 ##Part 2: Backend
 Your app’s backend api that interacts with your database is located in **/server/api**  
