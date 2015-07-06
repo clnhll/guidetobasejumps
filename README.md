@@ -7,7 +7,7 @@ Yeoman is a tool that allows you to generate barebones apps based on different s
 Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Waypoint:%20Get%20Set%20for%20Basejumps">Waypoint: Get Set for Basejumps</a>, use this guide to navigate the base structure of your new app and learn how to interact with the database as well as the user.  
 
 ###Throughout this guide:  
-**bolded/names/with.extensions** are directories and files in the project file structure  
+**/bolded/names/with.extensions** are directories and files in the project file structure  
 <a href="">highlighted.items/are/hypothetical</a> URLs that allow access to different pages in your app  
 *italicizedItems* are function and object names within your code
 
