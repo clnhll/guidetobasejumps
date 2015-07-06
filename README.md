@@ -55,7 +55,7 @@ Let’s take a look at **/server/api/thing**:
 ###Creating a new API endpoint:  
 
 	>> yo angular-fullstack:endpoint whatsit
- Using this line, you get Yeoman to automatically generate another API endpoint and new kind of collection for your database. Now we have things as well as whatsits! Feel free to open up the **whatsit.model.js** and define your whatsit however you like.
+ Using this line, you get Yeoman to automatically generate another API endpoint and new kind of collection for your database. Now we have *things* as well as *whatsits*! Feel free to open up the **whatsit.model.js** and define your whatsit however you like.
 
 ##Part 3: Interfacing Between Frontend & Backend
 ###Accessing the database from your frontend:  
