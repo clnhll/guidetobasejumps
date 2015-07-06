@@ -94,7 +94,7 @@ $http.post('/api/things', newThing).success(function(thatThingWeJustAdded) {
 	$scope.awesomeThings.push(thatThingWeJustAdded); // and add the id-having newThing!
 };
 ~~~
-to post it to your database and update your local array with the database’s version of your *newThing* object, unique *._id* and all. Notice the callback we pass to the *success* function receives the new *thing* back from the database as an argument! This way you can easily add it back to your local scope without too much overhead.
+This updates the local array for seemingly instant results for your user and then syncs it to your database and updates the local array in the background with the database’s version of your *newThing* object, unique *._id* and all. Notice the callback we pass to the *success* function receives the new *thing* back from the database as an argument! This way you can easily add it back to your local scope without too much overhead.
 
 ##Part 4: Dynamic URLs using $routeParams, more useful APIs
 What if you have a lot of users posting *things* to your website? Maybe your users want to have a profile, or a wall, of the *things* they’ve posted, and they want to be able to share it with their friends with a url? You can do that, no biggie!
