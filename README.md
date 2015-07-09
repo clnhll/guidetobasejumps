@@ -70,7 +70,10 @@ You must have noticed in **main.controller.js** how *things* were retrieved from
 
 What this does is call the api with a “get” request, which is then routed by **/server/api/thing/index.js** to the *exports.index* function in **thing.controller.js**. You’ll also notice in **main.controller.js** that there are included examples of *$http.post* and *$http.delete* functions too! How nice!  
 
-The *things* that show up on your app's main view are part of some seed data that is added to your database (including your test and admin users) every time you restart your app (by running `grunt serve` in the command line). These *things* and your default users are defined in **/server/config/seed.js**. You can edit this file to add or remove seed data to your testing environment. These will not show up in your production environment (when you push it to heroku). You can also turn off seeding by setting `seedDB: false` in **/server/config/environment/development.js**.
+###Seed Data
+The *things* that show up on your app's main view are part of some seed data that is added to your database (including your test and admin users) every time you restart your app (by running `grunt serve` in the command line). These *things* and your default users are defined in **/server/config/seed.js**. You can add or change data in this file, and it will be written to your database the next time you run *grunt*, but after you run *grunt* the first time, all of your seed data will persist in your database through future restarts (unless you delete it manually). 
+
+Unfortunately, every time you re-run grunt, the seed file replaces existing instances of your seed data in the database, and when that happens the database assigns new *.\_id* properties to these items (we'll cover *.\_id* properties in the next section), which may give you some issues later on in testing. To avoid this, you can turn off seeding by setting `seedDB: false` in **/server/config/environment/development.js**.
 
 ###Quick tip: 
 Say you want something to show up on the user view when you add it to the database. A new *thing* object will show up in an *ng-repeat* loop on your HTML view if you simply add it to your local array with  
