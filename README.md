@@ -1,6 +1,6 @@
 #Intro to Yeoman Angular-Fullstack Basejumps
 
->Hey FreeCodeCampers! This guide is here to help you navigate creating your first basejump. When I encountered the first basejump, I had no idea what was going on and spent weeks learning all of these things myself. Everything here is stuff I wish I had known coming into the basejumps. —<a href="http://twitter.com/clnhll">@clnhll</a>
+>Hey FreeCodeCampers! This guide is here to help you navigate creating your first basejump. When I encountered the first basejump, I had no idea what was going on and spent weeks learning all of these things myself. Everything here is stuff I wish I had known coming into the basejumps. Oh and by the way, if you have a question that isn't answered by this guide, that's an issue, and you should report it as an issue to this repository! —<a href="http://twitter.com/clnhll">@clnhll</a>
 
 Yeoman is a tool that allows you to generate barebones apps based on different software stacks using “generator” packages made by developers who want to make your life easier. These packages streamline your time developing and deploying websites using your platform of choice. We’re using a full-stack MEAN (MongoDB, ExpressJS, AngularJS, NodeJS) generator called generator-angular-fullstack by DaftMonk (https://github.com/DaftMonk/generator-angular-fullstack).  
 
@@ -69,6 +69,8 @@ You must have noticed in **main.controller.js** how *things* were retrieved from
 ~~~  
 
 What this does is call the api with a “get” request, which is then routed by **/server/api/thing/index.js** to the *exports.index* function in **thing.controller.js**. You’ll also notice in **main.controller.js** that there are included examples of *$http.post* and *$http.delete* functions too! How nice!  
+
+The *things* that show up on your app's main view are part of some seed data that is added to your database (including your test and admin users) every time you restart your app (by running `grunt serve` in the command line). These *things* and your default users are defined in **/server/config/seed.js**. You can edit this file to add or remove seed data to your testing environment. These will not show up in your production environment (when you push it to heroku).
 
 ###Quick tip: 
 Say you want something to show up on the user view when you add it to the database. A new *thing* object will show up in an *ng-repeat* loop on your HTML view if you simply add it to your local array with  
