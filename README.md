@@ -83,27 +83,16 @@ Let’s take a look at **/server/api/thing**:
  Using this line, you get Yeoman to automatically generate another API endpoint and new kind of collection for your database. Now we have *things* as well as *whatsits*! Feel free to open up **/server/api/whatsit/whatsit.model.js** and define your whatsit however you like.
 
 ###Fixing exports.update
-As it turns out, in **thing.controller.js** as well as in any other endpoints you may generate, the *exports.update* function that is called when you make an *$http.put* call from your frontend to modify an existing database object is broken. This is a <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues/310">known issue</a>, and can be fixed by changing the following two lines:
+As it turns out, in **thing.controller.js** as well as in any other endpoints you may generate, the *exports.update* function that is called when you make an *$http.put* call from your frontend to modify an existing database object is broken. This is a <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues/310">known issue</a>, and can be fixed by changing the following line:
  
 ~~~javascript
 // Updates an existing thing in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Thing.findById(req.params.id, function (err, thing) {
-    if (err) { return handleError(res, err); }
-    if(!thing) { return res.send(404); }
-    
-    _.extend(thing, req.body); 
-    // 1) formerly var updated = _.merge(thing, req.body);
-    
-    thing.save(function (err) { 
-    // 2) formerly updated.save(function (err) {
-    
-      if (err) { return handleError(res, err); }
-      return res.json(200, thing);
-    });
-  });
-};
+exports.update = function(req, res) { 
+...    
+    var updated = _.extend(thing, req.body); 
+    // change _.merge to _.extend
+... 
+ };
 ~~~
 
 ##Part 3: Interfacing Between Frontend & Backend
