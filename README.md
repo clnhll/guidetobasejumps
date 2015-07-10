@@ -49,13 +49,38 @@ Your app’s backend api that interacts with your database is located in **/serv
 Let’s take a look at **/server/api/thing**: 
 
 1. **index.js**:  this file routes the $http API requests made from your app’s front-end to the appropriate function in **thing.controller.js ** 
-2. **thing.controller.js**: Here is where we actually deal with the database! Take a minute to look through here and figure out what’s going on. These functions will: return all items in a collection, return a single item from a collection when passed its id, post an item to a collection, update an item in the collection (this doesn’t really work as intended out of the box, you may need to be creative and rewrite that one), and of course, delete an item from the collection.  
+2. **thing.controller.js**: Here is where we actually deal with the database! Take a minute to look through here and figure out what’s going on. These functions will: return all items in a collection, return a single item from a collection when passed its id, post an item to a collection, update an item in the collection (this doesn’t really work as intended out of the box, we're going to fix that in a minute), and of course, delete an item from the collection.  
 3. **thing.model.js**: Here, the actual structure of a *thing* object is defined. You can add or remove any fields you want from the *thing* model, and as long as they’re syntactically correct they won’t break anything, even if there are *things* with different schemas in your database already. But! You don’t just have to edit the *thing* model to make a new type of collection, because generator-angular-fullstack can do it for you!
+
 
 ###Creating a new API endpoint:  
 
 	>> yo angular-fullstack:endpoint whatsit
  Using this line, you get Yeoman to automatically generate another API endpoint and new kind of collection for your database. Now we have *things* as well as *whatsits*! Feel free to open up **/server/api/whatsit/whatsit.model.js** and define your whatsit however you like.
+
+###Fixing exports.update
+As it turns out, in **thing.controller.js** as well as in any other endpoints you may generate, the *exports.update* function that is called when you make an *$http.put* call from your frontend to modify an existing database object is broken. This is a <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues/310">known issue</a>, and can be fixed by changing the following two lines:
+ 
+~~~javascript
+// Updates an existing thing in the DB.
+exports.update = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Thing.findById(req.params.id, function (err, thing) {
+    if (err) { return handleError(res, err); }
+    if(!thing) { return res.send(404); }
+    
+    _.extend(thing, req.body); 
+    // 1) formerly var updated = _.merge(thing, req.body);
+    
+    thing.save(function (err) { 
+    // 2) formerly updated.save(function (err) {
+    
+      if (err) { return handleError(res, err); }
+      return res.json(200, thing);
+    });
+  });
+};
+~~~
 
 ##Part 3: Interfacing Between Frontend & Backend
 ###Accessing the database from your frontend:  
