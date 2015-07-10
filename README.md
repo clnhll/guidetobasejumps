@@ -11,6 +11,7 @@ Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Wayp
     - [Frontend file structure](#frontend-file-structure)
     - [Creating a new route](#creating-a-new-route)
     - [Creating a new directive](#creating-a-new-directive)
+    - [Grunt](#grunt)
 * [Part 2: Backend](#part-2-backend)
     - [Backend file structure](#backend-file-structure)
     - [Creating a new API endpoint ](#creating-a-new-api-endpoint)
@@ -67,7 +68,8 @@ And if you need an html template for your custom directive (maybe you’re just 
 <newdirective></newdirective>
 ~~~
 
-Cool! But what about the database? What’s going on there?
+###Grunt
+Whenever you create a new route or directive, you have to use `control+c` in your *grunt* terminal window to quit the grunt process and re-run `grunt serve` for your new route/directive to be included in your project's **index.html**. Sometimes *grunt* can be a little finnicky and refuses to run if it thinks something is wrong with your project. Obviously you should try to fix the problem, but grunt's errors aren't very helpful so don't worry too much—grunt usually will still run totally fine with the command `grunt serve --force`.
 
 ##Part 2: Backend
 
@@ -242,8 +244,8 @@ $scope.isLoggedInAsync = Auth.isLoggedInAsync;
 
 ~~~javascript
 $scope.isLoggedInAsync(callback(bool) {
-	if (bool) { // do thing if they’re logged in } 
-	else { // do different thing if they’re not logged in }
+	if (bool) { /** do thing if they’re logged in **/ } 
+	else { /** do different thing if they’re not logged in **/ }
 });
 ~~~
 
