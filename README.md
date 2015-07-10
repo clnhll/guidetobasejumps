@@ -6,12 +6,34 @@ Yeoman is a tool that allows you to generate barebones apps based on different s
 
 Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Waypoint:%20Get%20Set%20for%20Basejumps">Waypoint: Get Set for Basejumps</a>, use this guide to navigate the base structure of your new app and learn how to interact with the database as well as the user.  
 
-###Throughout this guide:  
+###Table of contents
+* [Part 1: Frontend](#part-1-frontend)
+    - [Frontend file structure](#frontend-file-structure)
+    - [Creating a new route](#creating-a-new-route)
+    - [Creating a new directive](#creating-a-new-directive)
+* [Part 2: Backend](#part-2-backend)
+    - [Backend file structure](#backend-file-structure)
+    - [Creating a new API endpoint ](#creating-a-new-api-endpoint)
+    - [Fixing exports.update](#fixing-exportsupdate)
+* [Part 3: Interfacing Between Frontend & Backend](#part-3-interfacing-between-frontend--backend)
+    - [Accessing the database from your frontend](#accessing-the-database-from-your-frontend)
+    - [Seed Data](#seed-data)
+    - [Quick tip: keep data in sync](#quick-tip-keep-data-in-sync)
+* [Part 4: Dynamic URLs using $routeParams, more useful APIs](#part-4-dynamic-urls-using-routeparams-more-useful-apis)
+    - [Dynamic URLS using $routeParams](#dynamic-urls-using-routeparams)
+    - [More Useful APIs](#more-useful-apis)
+* [Part 5: Auth, isLoggedInAsync()](#part-5-auth-isloggedinasync)
+* [Bonus: SocketIO](#bonus-socketio)
+* [Epilogue](#epilogue)
+  
+###Legend
 **/bolded/names/with.extensions** are directories and files in the project file structure  
 <a href="#">highlighted.items/are/hypothetical</a> URLs that allow access to different pages in your app  
 *italicizedItems* are function and object names within your code
 
 ##Part 1: Frontend
+
+###Frontend file structure
 First things first: All your user-facing files and angular files are in **/client/app/**  
 
 1. **app.js**: defines your app and includes some basic app-wide functions, you probably don’t really need to mess with it unless you’re trying to add more dependencies to your app. We’re not gonna worry about that right now.  
@@ -45,6 +67,8 @@ And if you need an html template for your custom directive (maybe you’re just 
 Cool! But what about the database? What’s going on there?
 
 ##Part 2: Backend
+
+###Backend file structure
 Your app’s backend api that interacts with your database is located in **/server/api**  
 Let’s take a look at **/server/api/thing**: 
 
@@ -83,7 +107,7 @@ exports.update = function(req, res) {
 ~~~
 
 ##Part 3: Interfacing Between Frontend & Backend
-###Accessing the database from your frontend:  
+###Accessing the database from your frontend 
 You must have noticed in **main.controller.js** how *things* were retrieved from the database and displayed:
   
 ~~~javascript
@@ -100,7 +124,7 @@ The *things* that show up on your app's main view are part of some seed data tha
 
 Unfortunately, every time you re-run grunt, the seed file replaces existing instances of your seed data in the database, and when that happens the database assigns new *.\_id* properties to these items (we'll cover *.\_id* properties in the next section), which may give you some issues later on in testing. To avoid this, you can turn off seeding by setting `seedDB: false` in **/server/config/environment/development.js**.
 
-###Quick tip: 
+###Quick tip: keep data in sync
 Say you want something to show up on the user view when you add it to the database. A new *thing* object will show up in an *ng-repeat* loop on your HTML view if you simply add it to your local array with  
 
 ~~~javascript
@@ -127,6 +151,7 @@ $http.post('/api/things', newThing).success(function(thatThingWeJustAdded) {
 This updates the local array for seemingly instant results for your user and then syncs it to your database and updates the local array in the background with the database’s version of your *newThing* object, unique *._id* and all. Notice the callback we pass to the *success* function receives the new *thing* back from the database as an argument! This way you can easily add it back to your local scope without too much overhead.
 
 ##Part 4: Dynamic URLs using $routeParams, more useful APIs
+###Dynamic URLs using $routeParams
 What if you have a lot of users posting *things* to your website? Maybe your users want to have a profile, or a wall, of the *things* they’ve posted, and they want to be able to share it with their friends with a url? You can do that, no biggie!
 
 Let’s say you used 
@@ -154,6 +179,8 @@ Then later on in **wall.controller.js**, you can see what username was requested
 ~~~javascript
 var wallOwner = $routeParams.username;
 ~~~
+
+###More useful APIs
 There are two more things you have to do before this to be useful to you, however. Say you want to show all the *things* associated with the username requested with that page: you must first  
  
 1. Have a “username” or “owner” field in your *thing* schema at **/server/api/thing/thing.model.js**  
