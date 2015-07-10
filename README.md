@@ -23,6 +23,9 @@ Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Wayp
     - [Dynamic URLS using $routeParams](#dynamic-urls-using-routeparams)
     - [More Useful APIs](#more-useful-apis)
 * [Part 5: Auth, isLoggedInAsync()](#part-5-auth-isloggedinasync)
+    - [Get info about the current user](#get-info-about-the-current-user)
+    - [Restrict a page to authenticated users](#restrict-a-page-to-authenticated-users)
+    - [isLoggedInAsync()](#isloggedinasync)
 * [Bonus: SocketIO](#bonus-socketio)
 * [Epilogue](#epilogue)
   
@@ -54,7 +57,7 @@ angular.module('myApp')
   
 
 ###Creating a new directive
-Do you remember custom directives from the shaping up with angular course? you can also make a custom directive!
+Do you remember custom directives from the shaping up with angular course? You can also make a custom directive!
 
 	>> yo angular-fullstack:directive newdirective
 
@@ -200,25 +203,42 @@ exports.indexUser = function(req, res) {
 Warning!!! this method only works right if usernames are absolutely unique between users. The default authentication system that comes with the angular-fullstack generator does not have unique usernames, so you’re probably better off using the *user._id* field to determine unique users in your database for now, unless you want to implement unique user names yourself by altering your **/api/user/user.model.js**, **/api/user/user.controller.js**, and your **/app/client/account/signup/signup.controller.js**. Thankfully, you should know how to go about doing all that after reading this guide!
 
 ##Part 5: Auth, isLoggedInAsync()
+###Get info about the current user
 You may have noticed if you opened up **/client/app/admin/admin.controller.js** that it calls the *Auth* module like so:
 
 ~~~javascript
 .controller('AdminCtrl', function ($scope, $http, Auth …
 ~~~
-It’s pretty useful to have *Auth* available in your controller to detect if a user is logged in, or to get information about the current user. In the body of your controller you can add 
+You can include Auth in your other controllers the same way. It’s pretty useful to have *Auth* available in your controller to detect if a user is logged in, or to get information about the current user. In the body of your controller you can add 
 
 ~~~javascript
 $scope.getCurrentUser = Auth.getCurrentUser;
 $scope.isLoggedIn = Auth.isLoggedIn;
 ~~~
 And then you can use *isLoggedIn()* or *getCurrentUser()* in the HTML view for your controller!  
-But wait—what if you’re trying to decide if a user is logged in before you make an *$http* call? It’s not guaranteed that it will work because *isLoggedIn()* is actually an async call. If you want to force something to wait until after *isLoggedIn()* is successful before it gets called, you should include *Auth.isLoggedInAsync*:
+
+###Restrict a page to authenticated users
+Let's say you have a route that you want to restrict to logged-in users; maybe you have a <a href="#">/profile</a> page that lets your users fill in some information about themselves, but it wouldn't work if they weren't logged in. Open **/client/app/profile/profile.js**, and add `authenticate: true` to the options passed to *$routeProvider.when* like so:
+
+~~~javascript 
+    $routeProvider
+      .when('/profile', {
+        templateUrl: 'app/profile/profile.html',
+        controller: 'ProfileCtrl',
+        authenticate: true // restrict to authenticated users
+      });
+~~~
+
+This way, if the user isn't authenticated when they try to access the <A href="#">/profile</a> page, they'll be redirected to your login screen to authenticate before continuing to their profile page.
+
+###isLoggedInAsync()
+Let's say you have a public page, but if the user is logged in you want to show special information to them. You'll need to detect if a user is logged in before you make an *$http* call, right? It’s not guaranteed that this will work, because *isLoggedIn()* is actually an async call. If you want to force something to wait until after *isLoggedIn()* is successful before it gets called, you should include *Auth.isLoggedInAsync*:
 
 ~~~javascript
 $scope.isLoggedInAsync = Auth.isLoggedInAsync;
 ~~~	
 
-*isLoggedInAsync* takes a callback function as an input, and passes the callback function a *true* boolean if the user is logged in, and a *false* if the user is not, so you can call it like so: 
+*isLoggedInAsync* takes a callback function as an input, and passes the callback function a *true* boolean if the user is logged in, and a *false* if the user is not. You can call it like so: 
 
 ~~~javascript
 $scope.isLoggedInAsync(callback(bool) {
