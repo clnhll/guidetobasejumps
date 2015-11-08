@@ -24,12 +24,13 @@ Once you’ve completed the <a href="http://www.freecodecamp.com/challenges/Wayp
     - [Dynamic URLS using $routeParams](#dynamic-urls-using-routeparams)
     - [More Useful APIs](#more-useful-apis)
 * [Part 5: Auth, isLoggedInAsync()](#part-5-auth-isloggedinasync)
+    - [Fixing Social Login Know Bug](#fixing-social-login-know-bug)
     - [Get info about the current user](#get-info-about-the-current-user)
     - [Restrict a page to authenticated users](#restrict-a-page-to-authenticated-users)
     - [isLoggedInAsync()](#isloggedinasync)
 * [Bonus: SocketIO](#bonus-socketio)
 * [Epilogue](#epilogue)
-  
+
 ###Legend
 **/bolded/names/with.extensions** are directories and files in the project file structure  
 <a href="#">highlighted.items/are/hypothetical</a> URLs that allow access to different pages in your app  
@@ -48,14 +49,14 @@ First things first: All your user-facing files and angular files are in **/clien
 Great! Now you know how to interact with the user! But what if you want your app to have another page that does something else? Maybe **main.html** shows the home page, but you want a page that shows a form to add a poll? maybe <a href="#">http://yourapp.wherever.itis/newpage</a>? This is where the yeoman generator comes in handy.
 ###Creating a new route
 
-	>> yo angular-fullstack:route newpage 
-   Typing the above into your command-line will generate a **newpage/** route for your app! It automatically generates all the necessary files within your **/client/app/newpage** folder, like your **/client/app/main** folder, with a **newpage.controller.js**, **newpage.controller.spec.js**, **newpage.js**, and **newpage.html**. These all pretty much behave like the ones in the **main/** route. If you’re accessing the database in your newpage controller, you’ll want to add *$http* to the list of dependencies in **newpage.controller.js** the same way it’s included in **main.controller.js**: 
+	>> yo angular-fullstack:route newpage
+   Typing the above into your command-line will generate a **newpage/** route for your app! It automatically generates all the necessary files within your **/client/app/newpage** folder, like your **/client/app/main** folder, with a **newpage.controller.js**, **newpage.controller.spec.js**, **newpage.js**, and **newpage.html**. These all pretty much behave like the ones in the **main/** route. If you’re accessing the database in your newpage controller, you’ll want to add *$http* to the list of dependencies in **newpage.controller.js** the same way it’s included in **main.controller.js**:
 
 ~~~javascript
 angular.module('myApp')
   .controller('MainCtrl', function ($scope, $http) { ...
 ~~~
-  
+
 
 ###Creating a new directive
 Do you remember custom directives from the shaping up with angular course? You can also make a custom directive!
@@ -75,9 +76,9 @@ Whenever you create a new route or directive, you have to use `control+c` in you
 
 ###Backend file structure
 Your app’s backend api that interacts with your database is located in **/server/api**  
-Let’s take a look at **/server/api/thing**: 
+Let’s take a look at **/server/api/thing**:
 
-1. **index.js**:  this file routes the $http API requests made from your app’s front-end to the appropriate function in **thing.controller.js ** 
+1. **index.js**:  this file routes the $http API requests made from your app’s front-end to the appropriate function in **thing.controller.js **
 2. **thing.controller.js**: Here is where we actually deal with the database! Take a minute to look through here and figure out what’s going on. These functions will: return all items in a collection, return a single item from a collection when passed its id, post an item to a collection, update an item in the collection (this doesn’t really work as intended out of the box, we're going to fix that in a minute), and of course, delete an item from the collection.  
 3. **thing.model.js**: Here, the actual structure of a *thing* object is defined. You can add or remove any fields you want from the *thing* model, and as long as they’re syntactically correct they won’t break anything, even if there are *things* with different schemas in your database already. But! You don’t just have to edit the *thing* model to make a new type of collection, because generator-angular-fullstack can do it for you!
 
@@ -89,21 +90,21 @@ Let’s take a look at **/server/api/thing**:
 
 ###Fixing exports.update
 As it turns out, in **thing.controller.js** as well as in any other endpoints you may generate, the *exports.update* function that is called when you make an *$http.put* call from your frontend to modify an existing database object is broken. This is a <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues/310">known issue</a>, and can be fixed by changing the following line:
- 
+
 ~~~javascript
 // Updates an existing thing in the DB.
-exports.update = function(req, res) { 
-...    
-    var updated = _.extend(thing, req.body); 
+exports.update = function(req, res) {
+...
+    var updated = _.extend(thing, req.body);
     // change _.merge to _.extend
-... 
+...
  };
 ~~~
 
 ##Part 3: Interfacing Between Frontend & Backend
-###Accessing the database from your frontend 
+###Accessing the database from your frontend
 You must have noticed in **main.controller.js** how *things* were retrieved from the database and displayed:
-  
+
 ~~~javascript
  $http.get('/api/things').success(function(awesomeThings){  
 	$scope.awesomeThings = awesomeThings;  
@@ -130,7 +131,7 @@ But you’ll still need to add it to your database collection. Add it to your co
 
 ~~~javascript
 
-$http.post('/api/things', newThing);	
+$http.post('/api/things', newThing);
 
 ~~~
 But wait! You’ll soon realize that while all the other things in your *$scope.awesomeThings* array have unique ids assigned by MongoDB (under the *thing.\_id* property), your *newThing* object will not, which will make it hard for you at some point to make database actions on it (deleting it from your database requires you to use its *._id* property). So what you’ll want to do after you add it to your *$scope.awesomeThings* array (because we want it to show up on the user’s page immediately). Altogether, your code to add a newThing to your local array and database will look like:
@@ -138,7 +139,7 @@ But wait! You’ll soon realize that while all the other things in your *$scope.
 ~~~javascript
 $scope.awesomeThings.push(newThing);
 $http.post('/api/things', newThing).success(function(thatThingWeJustAdded) {
-	$scope.awesomeThings.pop(); // let's lose that id-lacking newThing 
+	$scope.awesomeThings.pop(); // let's lose that id-lacking newThing
 	$scope.awesomeThings.push(thatThingWeJustAdded); // and add the id-having newThing!
 });
 ~~~
@@ -148,7 +149,7 @@ This updates the local array for seemingly instant results for your user and the
 ###Dynamic URLs using $routeParams
 What if you have a lot of users posting *things* to your website? Maybe your users want to have a profile, or a wall, of the *things* they’ve posted, and they want to be able to share it with their friends with a url? You can do that, no biggie!
 
-Let’s say you used 
+Let’s say you used
 
 	>> yo angular-fullstack:route wall
 
@@ -176,12 +177,12 @@ var wallOwner = $routeParams.username;
 
 ###More useful APIs
 There are two more things you have to do before this to be useful to you, however. Say you want to show all the *things* associated with the username requested with that page: you must first  
- 
+
 1. Have a “username” or “owner” field in your *thing* schema at **/server/api/thing/thing.model.js**  
 2. Write a custom route in **/server/api/thing/index.js** to catch a request for a specific username. The request from your frontend might look something like:
 
 ~~~javascript
- $http.get('/api/things/' + username).success( … 
+ $http.get('/api/things/' + username).success( …
 
 ~~~
 so you’ll add a line into your **index.js** like:
@@ -205,13 +206,35 @@ exports.indexUser = function(req, res) {
 Warning!!! this method only works right if usernames are absolutely unique between users. The default authentication system that comes with the angular-fullstack generator does not have unique usernames, so you’re probably better off using the *user._id* field to determine unique users in your database for now, unless you want to implement unique user names yourself by altering your **/api/user/user.model.js**, **/api/user/user.controller.js**, and your **/app/client/account/signup/signup.controller.js**. Thankfully, you should know how to go about doing all that after reading this guide!
 
 ##Part 5: Auth, isLoggedInAsync()
+###Fixing Social Login Know Bug
+<a href="https://github.com/DaftMonk/generator-angular-fullstack/issues/1390">OAuth social login fails #1390</a>
+When a new visitor attempts to login with with a social login it will fail the first time. This is a know issue that is easily fixable. Make the following changes to fix the issue.
+
+In **/server/api/auth/{socialLogin}/passport.js** where {socialLogin} is facebook/google/twitter, change:
+
+
+```javascript
+user.saveAsync()
+  .then(function(user) {
+    return done(null, user);
+  })
+```
+to
+
+```javascript
+user.saveAsync()
+  .then(function(user) {
+    return done(null, user[0]);
+  })
+```
+
 ###Get info about the current user
 You may have noticed if you opened up **/client/app/admin/admin.controller.js** that it calls the *Auth* module like so:
 
 ~~~javascript
 .controller('AdminCtrl', function ($scope, $http, Auth …
 ~~~
-You can include Auth in your other controllers the same way. It’s pretty useful to have *Auth* available in your controller to detect if a user is logged in, or to get information about the current user. In the body of your controller you can add 
+You can include Auth in your other controllers the same way. It’s pretty useful to have *Auth* available in your controller to detect if a user is logged in, or to get information about the current user. In the body of your controller you can add
 
 ~~~javascript
 $scope.getCurrentUser = Auth.getCurrentUser;
@@ -222,7 +245,7 @@ And then you can use *isLoggedIn()* or *getCurrentUser()* in the HTML view for y
 ###Restrict a page to authenticated users
 Let's say you have a route that you want to restrict to logged-in users; maybe you have a <a href="#">/profile</a> page that lets your users fill in some information about themselves, but it wouldn't work if they weren't logged in. Open **/client/app/profile/profile.js**, and add `authenticate: true` to the options passed to *$routeProvider.when* like so:
 
-~~~javascript 
+~~~javascript
     $routeProvider
       .when('/profile', {
         templateUrl: 'app/profile/profile.html',
@@ -238,18 +261,18 @@ Let's say you have a public page, but if the user is logged in you want to show 
 
 ~~~javascript
 $scope.isLoggedInAsync = Auth.isLoggedInAsync;
-~~~	
+~~~
 
-*isLoggedInAsync* takes a callback function as an input, and passes the callback function a *true* boolean if the user is logged in, and a *false* if the user is not. You can call it like so: 
+*isLoggedInAsync* takes a callback function as an input, and passes the callback function a *true* boolean if the user is logged in, and a *false* if the user is not. You can call it like so:
 
 ~~~javascript
 $scope.isLoggedInAsync(callback(bool) {
-	if (bool) { /** do thing if they’re logged in **/ } 
+	if (bool) { /** do thing if they’re logged in **/ }
 	else { /** do different thing if they’re not logged in **/ }
 });
 ~~~
 
-##Bonus: SocketIO 
+##Bonus: SocketIO
 If you've gotten to the Stock Charting basejump you may have noticed that the bonus criteria is to have your stock list live update across clients. This can be accomplished with SocketIO, but that’s not all SocketIO can do. Remember earlier, I mentioned that when using *$http.post* you had to update your local array with the database's version of the item you were posting? SocketIO keeps a user’s browser environment synced with your database in realtime. This has two practical upshots:  
 
 1. You no longer have to manually update your local data with database data; it is all managed automatically
@@ -258,13 +281,13 @@ If you've gotten to the Stock Charting basejump you may have noticed that the bo
 Even better, if you just include SocketIO when prompted during the yeoman angular-fullstack setup, there is absolutely no work involved to include it. It works out of the box, has a working demo on the **main/** route, and you can learn how to use it yourself by simply looking at how they include it in **main.controller.js** (so I won’t go any further into detail).
 
 ##Epilogue
-If you have any issues not covered in this guide: 
+If you have any issues not covered in this guide:
 
 1. google google google google duckduckgo
 2. bug @freecodecamp and me (@clnhll) on twitter
-3. did you miss a semicolon? a comma? 
+3. did you miss a semicolon? a comma?
 4. make a big loud stink in the freecodecamp help gitter.
 
-If you notice any inaccuracies or bad coding practices in this guide, please let me know ASAP! 
+If you notice any inaccuracies or bad coding practices in this guide, please let me know ASAP!
 
 I believe in you!
